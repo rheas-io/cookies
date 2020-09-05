@@ -1,0 +1,44 @@
+{
+  "name": "@rheas/cookies",
+  "version": "0.0.1",
+  "description": "Cookies handling module of the Rheas framework",
+  "main": "./index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "keywords": [
+    "cookies",
+    "rheas",
+    "framework",
+    "express",
+    "laravel",
+    "server",
+    "sessions"
+  ],
+  "scripts": {
+    "tsc": "tsc",
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "copypackage": "cp -rf package.json build",
+    "build": "tsc && npm run copypackage",
+    "copypackage_dev": "cp -rf package.json build_dev",
+    "build-dev": "tsc --outDir ./build_dev && npm run copypackage_dev"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.13.2",
+    "jest": "^25.4.0",
+    "ts-jest": "^25.4.0",
+    "typescript": "^3.8.3"
+  },
+  "author": "Kalesh Kaladharan",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rheas-io/cookies.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rheas-io/cookies/issues"
+  },
+  "homepage": "https://github.com/rheas-io/cookies#readme"
+}
