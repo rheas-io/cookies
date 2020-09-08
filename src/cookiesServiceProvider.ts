@@ -1,3 +1,4 @@
+import { IRequest } from '@rheas/contracts';
 import { CookiesManager } from './cookiesManager';
 import { ServiceProvider } from '@rheas/services';
 import { InstanceHandler } from '@rheas/contracts/container';
@@ -12,6 +13,6 @@ export class CookieServiceProvider extends ServiceProvider {
      * @returns
      */
     public serviceResolver(): InstanceHandler {
-        return () => new CookiesManager();
+        return (request) => new CookiesManager(request as IRequest);
     }
 }

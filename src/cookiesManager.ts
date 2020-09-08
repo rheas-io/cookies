@@ -1,5 +1,5 @@
 import { Cookie } from './cookie';
-import { KeyValue } from '@rheas/contracts';
+import { KeyValue, IRequest } from '@rheas/contracts';
 import { ICookie, ICookieManager } from '@rheas/contracts/cookies';
 
 export class CookiesManager implements ICookieManager {
@@ -17,6 +17,18 @@ export class CookiesManager implements ICookieManager {
      * @var Object
      */
     protected _queue: KeyValue<ICookie> = {};
+
+    /**
+     * Creates a cookie manager for the current request.
+     *
+     * The manager parses all the incoming cookies immediately and
+     * stores it in the _incoming variable.
+     *
+     * @param request
+     */
+    constructor(request: IRequest) {
+        this.parseIncomingCookies(request.headers.cookie || '');
+    }
 
     /**
      * Parses an array of cookie strings.
