@@ -104,4 +104,48 @@ export class CookiesManager implements ICookieManager {
     public unqueue(name: string): void {
         delete this._queue[name];
     }
+
+    /**
+     * Returns the incoming cookie value.
+     *
+     * @param name
+     * @param defaultValue
+     */
+    public incoming(name: string, defaultValue: any = null) {
+        const value = this._incoming[name];
+
+        return value ?? defaultValue;
+    }
+
+    /**
+     * Returns the queued cookie value.
+     *
+     * @param name
+     * @param defaultValue
+     */
+    public queued(name: string, defaultValue: any = null) {
+        const value = this._queue[name];
+
+        return value ?? defaultValue;
+    }
+
+    /**
+     * Returns a cookie value for the given name. Queued cookies
+     * takes precedence over the incoming cookies. If no cookie is
+     * found, defaultValue is used.
+     *
+     * //TODO handle case when cookie is empty ie, whether to return
+     * `defaultValue` or empty string when the cookie value is empty.
+     *
+     * @param key
+     * @param defaultValue
+     */
+    public get(key: string, defaultValue: any = null) {
+        let value = this.queued(key);
+
+        if (null === value) {
+            value = this.incoming(key);
+        }
+        return value ?? defaultValue;
+    }
 }
