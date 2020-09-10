@@ -109,24 +109,36 @@ export class CookiesManager implements ICookieManager {
      * Returns the incoming cookie value.
      *
      * @param name
-     * @param defaultValue
      */
-    public incoming(name: string, defaultValue: any = null) {
-        const value = this._incoming[name];
-
-        return value ?? defaultValue;
+    public incoming(name: string): ICookie | null {
+        return this._incoming[name] || null;
     }
 
     /**
      * Returns the queued cookie value.
      *
      * @param name
-     * @param defaultValue
      */
-    public queued(name: string, defaultValue: any = null) {
-        const value = this._queue[name];
+    public queued(name: string): ICookie | null {
+        return this._queue[name] || null;
+    }
 
-        return value ?? defaultValue;
+    /**
+     * Returns all the parsed incoming cookies as key value dictionary.
+     *
+     * @returns
+     */
+    public incomingCookies(): KeyValue<ICookie> {
+        return this._incoming;
+    }
+
+    /**
+     * Returns all the queued cookies as key-value dictionary.
+     *
+     * @returns
+     */
+    public queuedCookies(): KeyValue<ICookie> {
+        return this._queue;
     }
 
     /**
