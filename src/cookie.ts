@@ -90,7 +90,7 @@ export class Cookie implements ICookie {
     constructor(
         name: string,
         value: string = '',
-        expiresAt: number = Date.now(),
+        expiresAt: number = 0,
         path: string = '/',
         domain: string = '',
         secure: boolean = false,
@@ -121,12 +121,13 @@ export class Cookie implements ICookie {
     }
 
     /**
-     * Sets the UNIX timestamp in milliseconds at which cookie expires.
+     * Sets the UNIX timestamp in milliseconds at which cookie expires. Set
+     * the value to 0 if the cookie should expire when browser closes.
      *
      * @param timestamp
      */
-    public setExpire(timestamp: number = Date.now()): ICookie {
-        if (!moment(timestamp).isValid()) {
+    public setExpire(timestamp: number = 0): ICookie {
+        if (timestamp !== 0 && !moment(timestamp).isValid()) {
             throw new InvalidArgumentException('An invalid expiry time is given');
         }
         this._expiresAt = timestamp;
@@ -141,7 +142,7 @@ export class Cookie implements ICookie {
      * @returns
      */
     public expire(): ICookie {
-        const pastTime = moment(this.getExpiry()).subtract(13, 'years').valueOf();
+        const pastTime = moment(Date.now()).subtract(13, 'years').valueOf();
 
         return this.setExpire(pastTime);
     }
@@ -152,7 +153,7 @@ export class Cookie implements ICookie {
      * @returns
      */
     public forever(): ICookie {
-        const futureTime = moment(this.getExpiry()).add(13, 'years').valueOf();
+        const futureTime = moment(Date.now()).add(13, 'years').valueOf();
 
         return this.setExpire(futureTime);
     }
@@ -242,7 +243,8 @@ export class Cookie implements ICookie {
     }
 
     /**
-     * Returns the UNIX timestamp of cookie expiry time.
+     * Returns the UNIX timestamp of cookie expiry time or 0 if the cookie
+     * should expire when browser closes.
      *
      * @returns
      */
@@ -256,6 +258,9 @@ export class Cookie implements ICookie {
      * @returns
      */
     public getMaxAge(): number {
+        if (this.getExpiry() === 0) {
+            return 0;
+        }
         const secondsFromNow = moment(this.getExpiry()).diff(moment(), 'seconds');
 
         return secondsFromNow > 0 ? secondsFromNow : 0;
@@ -334,7 +339,7 @@ export class Cookie implements ICookie {
      * @returns
      */
     public toString() {
-        let cookie = this.rawValue(this.getName()) + '=';
+        let cookie = this.rawIfNeededOf(this.getName()) + '=';
 
         // If the value is empty, we will first expire the cookie by
         // setting it's expiry time to something in the past. Also,
@@ -342,14 +347,18 @@ export class Cookie implements ICookie {
         if (this.getValue() === '') {
             this.expire();
 
-            cookie += 'deleted; expires=' + Rdate.responseFormat(this.getExpiry()) + '; Max-Age=0';
+            cookie += '; expires=' + Rdate.responseFormat(this.getExpiry()) + '; Max-Age=0';
         }
         // If the value is not empty, we will set the value and the expiry
         // time formatted in the response date format, and the max-age in
         // seconds.
         else {
-            cookie += this.rawValue(this.getValue());
-            cookie += '; expires=' + Rdate.responseFormat(this.getExpiry());
+            cookie += this.rawIfNeededOf(this.getValue());
+
+            if (this.getExpiry() !== 0) {
+                cookie += '; expires=' + Rdate.responseFormat(this.getExpiry());
+            }
+
             cookie += '; Max-Age=' + this.getMaxAge();
         }
 
@@ -382,7 +391,7 @@ export class Cookie implements ICookie {
      *
      * @param value
      */
-    private rawValue(value: string): string {
+    private rawIfNeededOf(value: string): string {
         return this.isRaw() ? value : encodeURIComponent(value);
     }
 }
