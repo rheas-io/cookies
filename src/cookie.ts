@@ -1,5 +1,5 @@
-import { moment, Rdate } from '@rheas/utils/rDate';
 import { ICookie } from '@rheas/contracts/cookies';
+import { dayjs, Redate } from '@rheas/support/redate';
 import { SameSite } from '@rheas/contracts/cookies/sameSite';
 import { InvalidArgumentException } from '@rheas/errors/invalidArgument';
 
@@ -127,7 +127,7 @@ export class Cookie implements ICookie {
      * @param timestamp
      */
     public setExpire(timestamp: number = 0): ICookie {
-        if (timestamp !== 0 && !moment(timestamp).isValid()) {
+        if (timestamp !== 0 && !dayjs(timestamp).isValid()) {
             throw new InvalidArgumentException('An invalid expiry time is given');
         }
         this._expiresAt = timestamp;
@@ -142,7 +142,7 @@ export class Cookie implements ICookie {
      * @returns
      */
     public expire(): ICookie {
-        const pastTime = moment(Date.now()).subtract(13, 'years').valueOf();
+        const pastTime = dayjs(Date.now()).subtract(13, 'year').valueOf();
 
         return this.setExpire(pastTime);
     }
@@ -153,7 +153,7 @@ export class Cookie implements ICookie {
      * @returns
      */
     public forever(): ICookie {
-        const futureTime = moment(Date.now()).add(13, 'years').valueOf();
+        const futureTime = dayjs(Date.now()).add(13, 'year').valueOf();
 
         return this.setExpire(futureTime);
     }
@@ -261,7 +261,7 @@ export class Cookie implements ICookie {
         if (this.getExpiry() === 0) {
             return 0;
         }
-        const secondsFromNow = moment(this.getExpiry()).diff(moment(), 'seconds');
+        const secondsFromNow = dayjs(this.getExpiry()).diff(dayjs(), 'second');
 
         return secondsFromNow > 0 ? secondsFromNow : 0;
     }
@@ -347,7 +347,7 @@ export class Cookie implements ICookie {
         if (this.getValue() === '') {
             this.expire();
 
-            cookie += '; expires=' + Rdate.responseFormat(this.getExpiry()) + '; Max-Age=0';
+            cookie += '; expires=' + Redate.responseFormat(this.getExpiry()) + '; Max-Age=0';
         }
         // If the value is not empty, we will set the value and the expiry
         // time formatted in the response date format, and the max-age in
@@ -356,7 +356,7 @@ export class Cookie implements ICookie {
             cookie += this.rawIfNeededOf(this.getValue());
 
             if (this.getExpiry() !== 0) {
-                cookie += '; expires=' + Rdate.responseFormat(this.getExpiry());
+                cookie += '; expires=' + Redate.responseFormat(this.getExpiry());
             }
 
             cookie += '; Max-Age=' + this.getMaxAge();
