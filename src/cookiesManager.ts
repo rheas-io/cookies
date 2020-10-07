@@ -152,7 +152,7 @@ export class CookiesManager implements ICookieManager {
      * @param key
      * @param defaultValue
      */
-    public get(key: string, defaultValue: any = null) {
+    public get(key: string, defaultValue: ICookie | null = null): ICookie | null {
         let value = this.queued(key);
 
         if (null === value) {
