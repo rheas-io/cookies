@@ -323,6 +323,15 @@ If you don't want to use a singleton, override the `register` function on your s
 - Add error view files before release.
 - Add logging module before release.
 
+## Sponsor
+
+[Kaysy LLC](https://www.kaysy.io/) sponsors the development of this framework. Kaysy is an internet company working on SaaS products and Open-Source softwares.
+
+## Community
+
+**Author -** [Kalesh Kaladharan](https://twitter.com/kalesh_13/)  
+**Twitter -** [Kaysy LLC](https://twitter.com/kaysyio/)
+
 ## License
 
 The Rheas framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
