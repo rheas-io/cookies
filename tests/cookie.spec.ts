@@ -1,6 +1,6 @@
 import { Cookie } from '../src/cookie';
 
-describe('Test cookies', () => {
+describe('Cookie', () => {
     /**
      *
      */

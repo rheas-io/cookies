@@ -20,8 +20,8 @@
   },
   "scripts": {
     "tsc": "tsc",
-    "test": "jest",
-    "coverage": "jest --coverage",
+    "test": "jest --verbose",
+    "coverage": "jest --verbose --coverage",
     "copypackage": "cp -rf package.json build",
     "build": "tsc && npm run copypackage",
     "copypackage_dev": "cp -rf package.json build_dev",
